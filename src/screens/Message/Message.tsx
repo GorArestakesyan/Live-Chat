@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {
   FlatList,
   InputAccessoryView,
@@ -10,12 +10,15 @@ import {
   View,
 } from 'react-native';
 import Back from '../../components/Back';
+import {ThemeContainer} from '../../components/ThemeContainer';
 import {useGlobalState} from '../../core/global';
+import {ThemeContext} from '../navigation/Navigation';
 import MessageBubble from './MessageBubble';
 import MessageHeader from './MessageHeader';
 import MessageInput from './MessageInput';
 
 const MessageScreen = ({navigation, route}: any) => {
+  const {colors} = useContext(ThemeContext);
   const [message, setMessage] = useState('');
 
   const friend = route.params.friend;
@@ -47,6 +50,7 @@ const MessageScreen = ({navigation, route}: any) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerStyle: {backgroundColor: colors.background},
       headerTitle: () => <MessageHeader friend={friend} />,
       headerLeft: () => <Back size={40} onPress={() => navigation.goBack()} />,
     });
@@ -60,40 +64,47 @@ const MessageScreen = ({navigation, route}: any) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View
-        style={[
-          styles.messagesContainer,
-          {marginBottom: Platform.OS === 'ios' ? 60 : 0},
-        ]}>
-        <TouchableWithoutFeedback
-          onPress={Keyboard.dismiss}
-          style={styles.messagesContainer}>
-          <FlatList
-            data={[{id: -1}, ...messages]}
-            inverted={true}
-            automaticallyAdjustKeyboardInsets={true}
-            horizontal={false}
-            onEndReached={() => {
-              if (messagesNext) {
-                messagesList(connectionID, messagesNext);
-              }
-            }}
-            contentContainerStyle={styles.flatlistContainer}
-            keyExtractor={(item, index) => `${item?.id}${index}`}
-            renderItem={({item, index}) => (
-              <MessageBubble message={item} index={index} friend={friend} />
-            )}
-          />
-        </TouchableWithoutFeedback>
-      </View>
+      <ThemeContainer>
+        <View
+          style={[
+            {
+              marginBottom: Platform.OS === 'ios' ? 60 : 0,
+            },
+          ]}>
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            style={styles.messagesContainer}>
+            <FlatList
+              data={[{id: -1}, ...messages]}
+              inverted={true}
+              automaticallyAdjustKeyboardInsets={true}
+              horizontal={false}
+              onEndReached={() => {
+                if (messagesNext) {
+                  messagesList(connectionID, messagesNext);
+                }
+              }}
+              contentContainerStyle={styles.flatlistContainer}
+              keyExtractor={(item, index) => `${item?.id}${index}`}
+              renderItem={({item, index}) => (
+                <MessageBubble message={item} index={index} friend={friend} />
+              )}
+            />
+          </TouchableWithoutFeedback>
+        </View>
 
-      {Platform.OS === 'ios' ? (
-        <InputAccessoryView backgroundColor={'#fff'}>
+        {Platform.OS === 'ios' ? (
+          <InputAccessoryView backgroundColor={colors.background}>
+            <MessageInput
+              message={message}
+              setMessage={onType}
+              onSend={onSend}
+            />
+          </InputAccessoryView>
+        ) : (
           <MessageInput message={message} setMessage={onType} onSend={onSend} />
-        </InputAccessoryView>
-      ) : (
-        <MessageInput message={message} setMessage={onType} onSend={onSend} />
-      )}
+        )}
+      </ThemeContainer>
     </SafeAreaView>
   );
 };

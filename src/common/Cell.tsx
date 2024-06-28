@@ -1,8 +1,15 @@
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {ThemeContext} from '../screens/navigation/Navigation';
 
 const Cell = ({children}: PropsWithChildren) => {
-  return <View style={styles.container}>{children}</View>;
+  const {colors} = useContext(ThemeContext);
+
+  return (
+    <View style={[styles.container, {borderColor: colors.lightGray}]}>
+      {children}
+    </View>
+  );
 };
 
 export default Cell;
@@ -10,10 +17,10 @@ export default Cell;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    paddingVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#f0f0f0',
+    borderBottomWidth: 0.7,
     flex: 1,
   },
 });

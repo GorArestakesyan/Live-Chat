@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native';
 interface IBack {
   size?: number;
   color?: string;
-  onPress: any;
+  onPress: () => void;
 }
 
 const Back = ({size = 25, color = '#606060', onPress = () => {}}: IBack) => {

@@ -1,6 +1,8 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {ThemeContext} from '../screens/navigation/Navigation';
+import {ThemeContainer} from './ThemeContainer';
 
 interface IEmpty {
   icon: string;
@@ -10,20 +12,23 @@ interface IEmpty {
 }
 
 const Empty = ({icon, message, size = 70, centered = true}: IEmpty) => {
+  const {colors} = useContext(ThemeContext);
   const emplyContainer: ViewStyle = {
     justifyContent: centered ? 'center' : 'flex-start',
   };
   return (
-    <View style={[emplyContainer, styles.emptyContainer]}>
-      <FontAwesomeIcon
-        //@ts-ignore
-        icon={icon}
-        size={size}
-        color="#d0d0d0"
-        style={styles.icon}
-      />
-      <Text style={styles.text}>{message}</Text>
-    </View>
+    <ThemeContainer>
+      <View style={[emplyContainer, styles.emptyContainer]}>
+        <FontAwesomeIcon
+          //@ts-ignore
+          icon={icon}
+          size={size}
+          color={colors.lightGray}
+          style={styles.icon}
+        />
+        <Text style={styles.text}>{message}</Text>
+      </View>
+    </ThemeContainer>
   );
 };
 

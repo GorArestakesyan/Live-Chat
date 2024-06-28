@@ -1,11 +1,14 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, {useContext} from 'react';
 import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Thumbnail from '../../components/Thumbnail';
 import {useGlobalState} from '../../core/global';
 import utils from '../../core/utils';
+import {ThemeContext} from '../navigation/Navigation';
 const ProfileImage = () => {
+  const {colors} = useContext(ThemeContext);
+
   const uploadThumbnail = useGlobalState(
     (state: any) => state?.uploadThumbnail,
   );
@@ -26,7 +29,7 @@ const ProfileImage = () => {
 
   return (
     <TouchableOpacity
-      style={styles.profileImageContainer}
+      style={[styles.profileImageContainer, {shadowColor: colors.imageShadow}]}
       onPress={handleUploadImage}>
       <Thumbnail path={user.thumbnail} size={180} />
       <Pressable style={styles.editBox}>
@@ -41,7 +44,7 @@ export default ProfileImage;
 const styles = StyleSheet.create({
   profileImageContainer: {
     marginBottom: 20,
-    shadowColor: 'rgba(0,0,0,0.6)',
+
     shadowOffset: {
       width: 4,
       height: 7,

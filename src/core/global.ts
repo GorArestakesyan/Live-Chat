@@ -4,23 +4,85 @@ import api from './api';
 import secure from './secure';
 import utils from './utils';
 
+type TConnectionType = 'connected' | 'no-connection';
+
+type TSearchedUser = {
+  username: string;
+  name: string;
+  thumbnail: string;
+  status: TConnectionType;
+};
+type TUserTyping = {
+  username: string;
+};
+type TRequestUser = {
+  id: number;
+  sender: Omit<TSearchedUser, 'status'>;
+  receiver: Omit<TSearchedUser, 'status'>;
+  created: Date;
+};
+type TMessage = {
+  message: {
+    id: number;
+    is_me: boolean;
+    text: string;
+    created: Date;
+  };
+  friend: Omit<TSearchedUser, 'status'>;
+};
+type TMessageList = {
+  messagesList: TMessage[];
+  messages: TMessage[];
+  next: number | null;
+  friend: Omit<TSearchedUser, 'status'>;
+};
+export type TUser = {
+  id: number;
+  friend: Omit<TSearchedUser, 'status'>;
+  preview: 'New connection';
+  updated: Date;
+};
+type TThumbnail = {
+  uri: string;
+  fileSize: number;
+  height: number;
+  base64: string;
+  type: string;
+  width: number;
+  fileName: string;
+};
+
+export type TGlobalState = {
+  initialized: boolean;
+  searchList: TSearchedUser[];
+  requestList: TRequestUser[];
+  friendList: TUser[];
+  messagesList: TMessageList[];
+  messagesNext: boolean;
+  messagesTyping: TUserTyping;
+  messagesUsername: TUserTyping;
+};
 //-----------------------------------------
-//     Socket receive message handlers
+//     Socket receive message handlers  (second argument for that function is y getter)
 //-----------------------------------------
 
-function responseSearch(set: any, get: any, data: any) {
+function responseSearch(set: any, _: unknown, data: TSearchedUser[] | []) {
   set(() => ({
     searchList: data,
   }));
 }
 
-function responseRequestList(set: any, get: any, requestsList: any) {
+function responseRequestList(
+  set: any,
+  _: unknown,
+  requestsList: TRequestUser | [],
+) {
   set(() => ({
     requestList: requestsList,
   }));
 }
 
-function responseMessageTyping(set: any, get: any, data: any) {
+function responseMessageTyping(set: any, get: any, data: TUserTyping) {
   if (data.username !== get().messagesUsername) {
     return;
   }
@@ -29,7 +91,7 @@ function responseMessageTyping(set: any, get: any, data: any) {
   }));
 }
 
-function responseMessageList(set: any, get: any, data: any) {
+function responseMessageList(set: any, get: any, data: TMessageList) {
   set(() => ({
     messagesList: [...get().messagesList, ...data.messages],
     messagesUsername: data.friend.username,
@@ -37,7 +99,7 @@ function responseMessageList(set: any, get: any, data: any) {
   }));
 }
 
-function responseMessageSend(set: any, get: any, data: any) {
+function responseMessageSend(set: any, get: any, data: TMessage) {
   const username = data.friend.username;
   // Move friendList item for this friend to the start of
   // list, update the preview text and update the time stamp
@@ -68,26 +130,26 @@ function responseMessageSend(set: any, get: any, data: any) {
   }));
 }
 
-function responseFriendList(set: any, get: any, friendList: any) {
+function responseFriendList(set: any, get: any, friendList: TUser[] | []) {
   set(() => ({
     friendList: friendList,
   }));
 }
 
-function responseFriendNew(set: any, get: any, friend: any) {
+function responseFriendNew(set: any, get: any, friend: TUser | TUser[]) {
   const friendList = [friend, ...get().friendList];
   set(() => ({
     friendList: friendList,
   }));
 }
 
-function responseThumbnail(set: any, get: (key: string) => any, data: any) {
+function responseThumbnail(set: any, _: unknown, data: TThumbnail) {
   set(() => ({
     user: data,
   }));
 }
 
-function responseRequestConnect(set: any, get: any, connection: any) {
+function responseRequestConnect(set: any, get: any, connection: TRequestUser) {
   const user = get().user;
   // If i was the one that made the connect request,
   // update the search list row
@@ -118,7 +180,7 @@ function responseRequestConnect(set: any, get: any, connection: any) {
   }
 }
 
-function responseRequestAccept(set: any, get: any, connection: any) {
+function responseRequestAccept(set: any, get: any, connection: TRequestUser) {
   const user = get().user;
   // If I was the one that accepted the request, remove
   // request from the  requestList
@@ -211,7 +273,7 @@ export const useGlobalState = create((set, get: any) => ({
   authenticated: false,
   user: {},
 
-  login: (credentials: any, user: any, tokens: string[]) => {
+  login: (credentials: any, user: TUser, tokens: string[]) => {
     secure.set('credentials', credentials);
     secure.set('tokens', tokens);
     set(() => ({
@@ -402,12 +464,10 @@ export const useGlobalState = create((set, get: any) => ({
   //     Thumbnail
   //-------------------------
 
-  uploadThumbnail: (file: any) => {
+  uploadThumbnail: (file: TThumbnail) => {
     const socket = get().socket;
 
     if (socket && socket.readyState === WebSocket.OPEN) {
-      console.log('SENDING BRO');
-
       socket.send(
         JSON.stringify({
           source: 'thumbnail',

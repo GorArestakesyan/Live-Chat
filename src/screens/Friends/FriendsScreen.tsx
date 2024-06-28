@@ -1,6 +1,7 @@
 import React from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, FlatList} from 'react-native';
 import Empty from '../../components/Empty';
+import {ThemeContainer} from '../../components/ThemeContainer';
 import {useGlobalState} from '../../core/global';
 import FriendRow from './FriendRow';
 
@@ -17,7 +18,7 @@ const FriendsScreen = ({navigation}: any) => {
   }
 
   return (
-    <View style={styles.frindsListWrapper}>
+    <ThemeContainer>
       <FlatList
         data={friendsList}
         renderItem={({item}) => (
@@ -25,12 +26,8 @@ const FriendsScreen = ({navigation}: any) => {
         )}
         keyExtractor={item => item.id}
       />
-    </View>
+    </ThemeContainer>
   );
 };
 
 export default FriendsScreen;
-
-const styles = StyleSheet.create({
-  frindsListWrapper: {},
-});

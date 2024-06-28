@@ -1,20 +1,29 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Cell from '../../common/Cell';
 import Thumbnail from '../../components/Thumbnail';
 import utils from '../../core/utils';
+import {ThemeContext} from '../navigation/Navigation';
 
 const FriendRow = ({navigation, item}: any) => {
   const handleNavigate = () => navigation.navigate('Messages', item);
+  const {colors} = useContext(ThemeContext);
+
   return (
     <TouchableOpacity onPress={handleNavigate}>
       <Cell>
         <Thumbnail path={item.friend.thumbnail} size={70} />
         <View style={styles.requestRowItem}>
-          <Text style={styles.name}>{item.friend.name}</Text>
+          <Text style={[styles.name, {color: colors.name}]}>
+            {item.friend.name}
+          </Text>
           <View style={styles.nameAndInfoBox}>
-            <Text style={styles.username}>{item.preview}</Text>
-            <Text style={styles.time}>{utils.formatedData(item.updated)}</Text>
+            <Text style={[styles.username, {color: colors.darkGraySecondary}]}>
+              {item.preview}
+            </Text>
+            <Text style={[styles.time, {color: colors.name}]}>
+              {utils.formatedData(item.updated)}
+            </Text>
           </View>
         </View>
       </Cell>
@@ -36,15 +45,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    color: '#202020',
     marginBottom: 4,
   },
   username: {
     justifyContent: 'space-between',
-    color: '#606060',
   },
   time: {
-    color: '#909090',
     fontSize: 13,
   },
 });

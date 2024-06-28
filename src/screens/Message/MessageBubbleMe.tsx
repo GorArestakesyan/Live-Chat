@@ -1,16 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {ThemeContext} from '../navigation/Navigation';
 
 interface IMessageBubbleMe {
   text: string;
 }
 
 const MessageBubbleMe = ({text}: IMessageBubbleMe) => {
+  const {colors} = useContext(ThemeContext);
   return (
     <View style={styles.messageWrapper}>
       <View style={styles.flex} />
-      <View style={styles.messageContainer}>
-        <Text style={styles.messageText}>{text}</Text>
+      <View
+        style={[
+          styles.messageContainer,
+          {backgroundColor: colors.activeTabIcon},
+        ]}>
+        <Text style={[styles.messageText]}>{text}</Text>
       </View>
     </View>
   );
@@ -26,7 +32,6 @@ const styles = StyleSheet.create({
   },
   flex: {flex: 1},
   messageContainer: {
-    backgroundColor: '#52a447',
     borderRadius: 21,
     maxWidth: '75%',
     paddingHorizontal: 16,

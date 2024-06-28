@@ -1,13 +1,14 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useEffect, useLayoutEffect} from 'react';
+import React, {useContext, useEffect, useLayoutEffect} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Thumbnail from '../../components/Thumbnail';
 import {useGlobalState} from '../../core/global';
 import FriendsScreen from '../Friends/FriendsScreen';
 import ProfileScreen from '../Profile/Prifile';
 import RequestsScreen from '../Requests/Requests';
+import {ThemeContext} from '../navigation/Navigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,6 +16,8 @@ const HomeScreen = ({navigation}: any) => {
   const socketConnect = useGlobalState((state: any) => state.socketConnect);
   const socketClose = useGlobalState((state: any) => state.socketClose);
   const user = useGlobalState((state: any) => state.user);
+  //@ts-ignore
+  const {colors} = useContext(ThemeContext);
 
   const onSearch = () => navigation.navigate('Search');
 
@@ -36,6 +39,8 @@ const HomeScreen = ({navigation}: any) => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        headerStyle: {backgroundColor: colors.background},
+        headerTitleStyle: {color: colors.primaryText},
         headerLeft: () => {
           return (
             <View style={styles.avatarImgWrapper}>
@@ -49,7 +54,7 @@ const HomeScreen = ({navigation}: any) => {
               <FontAwesomeIcon
                 icon={'magnifying-glass'}
                 size={22}
-                color="#404040"
+                color={colors.lightGray2}
               />
             </TouchableOpacity>
           );
@@ -65,8 +70,9 @@ const HomeScreen = ({navigation}: any) => {
           return <FontAwesomeIcon icon={icon} size={28} color={color} />;
         },
         tabBarShowLabel: false,
-        tabBarActiveTintColor: '#52A447',
-        tabBarInactiveTintColor: '#ccc',
+        tabBarItemStyle: {backgroundColor: colors.background},
+        tabBarActiveTintColor: colors.activeTabIcon,
+        tabBarInactiveTintColor: colors.gray,
       })}>
       <Tab.Screen name="Requests" component={RequestsScreen} />
       <Tab.Screen name="Friends" component={FriendsScreen} />

@@ -1,23 +1,21 @@
-import React, {useEffect} from 'react';
-import {
-  Animated,
-  Image,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {Animated, Image, SafeAreaView, StyleSheet} from 'react-native';
 import Title from '../common/Title';
+import {ThemeContext} from './navigation/Navigation';
 
 const DURATION = 900;
 
 const Splash = ({navigation}: any) => {
   const translateY = new Animated.Value(-1200);
+  const {colors} = useContext(ThemeContext);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {goBack} = navigation;
   const animatedStyle = {
+    flex: 1,
     transform: [{translateY}],
   };
+  console.log(colors);
 
   useEffect(() => {
     Animated.timing(translateY, {
@@ -29,10 +27,15 @@ const Splash = ({navigation}: any) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
-      <StatusBar animated={true} barStyle={'default'} />
+    // <StatusBar
+    //     animated={true}
+    //     barStyle={'dark-content'}
+    //     backgroundColor={'#000'}
+    //   />
+
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <Animated.View style={[animatedStyle, styles.splashBox]}>
-        <Title text="Live Chat" color="#fff" />
+        <Title text="Live Chat" color={colors.primaryText} />
         <Image source={require('../assets/gifs/icons8-chat.gif')} />
       </Animated.View>
     </SafeAreaView>
@@ -46,7 +49,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#000',
   },
   splashBox: {
     alignItems: 'center',

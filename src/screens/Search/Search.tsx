@@ -1,21 +1,19 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
+import {FlatList, StyleSheet, TextInput, View} from 'react-native';
 import Back from '../../components/Back';
 import Empty from '../../components/Empty';
+import {ThemeContainer} from '../../components/ThemeContainer';
 import {useGlobalState} from '../../core/global';
+import {ThemeContext} from '../navigation/Navigation';
 import SearchRow from './SearchRow';
 
 const SearchScreen = ({navigation}: any) => {
   const [query, setQuery] = useState('');
   const searchList = useGlobalState((state: any) => state.searchList);
   const searchUsers = useGlobalState((state: any) => state.searchUsers);
+  const {colors} = useContext(ThemeContext);
 
   useEffect(() => {
     searchUsers(query);
@@ -24,14 +22,26 @@ const SearchScreen = ({navigation}: any) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <Back size={40} onPress={() => navigation.goBack()} />,
+      headerStyle: {
+        backgroundColor: colors.background,
+      },
+      headerLeft: () => (
+        <Back
+          size={40}
+          color={colors.back}
+          onPress={() => navigation.goBack()}
+        />
+      ),
     });
   });
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <ThemeContainer>
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            {backgroundColor: colors.lightGray, color: colors.primaryText},
+          ]}
           value={query}
           onChangeText={e => setQuery(e)}
           placeholder="Search..."
@@ -58,7 +68,7 @@ const SearchScreen = ({navigation}: any) => {
           renderItem={({item}) => <SearchRow user={item} />}
         />
       )}
-    </SafeAreaView>
+    </ThemeContainer>
   );
 };
 
@@ -67,7 +77,7 @@ export default SearchScreen;
 const styles = StyleSheet.create({
   searchContainer: {
     padding: 15,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.2,
     borderColor: '#f0f0f0',
   },
   input: {

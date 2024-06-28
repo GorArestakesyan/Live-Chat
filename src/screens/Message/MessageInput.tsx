@@ -1,6 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {ThemeContext} from '../navigation/Navigation';
 
 interface IMessage {
   message: string;
@@ -9,20 +10,29 @@ interface IMessage {
 }
 
 const MessageInput = ({message, setMessage, onSend}: IMessage) => {
+  const {colors} = useContext(ThemeContext);
+
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, {backgroundColor: colors.background}]}>
       <TextInput
         value={message}
         onChangeText={setMessage}
         placeholder="Message..."
-        placeholderTextColor={'#909090'}
-        style={styles.input}
+        placeholderTextColor={'#CCC'}
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.lightGray,
+            borderColor: colors.background,
+            color: colors.primaryText,
+          },
+        ]}
       />
       <TouchableOpacity onPress={onSend}>
         <FontAwesomeIcon
           icon={'paper-plane'}
           size={22}
-          color={'#52a447'}
+          color={colors.activeTabIcon}
           style={styles.sendIcon}
         />
       </TouchableOpacity>
@@ -36,7 +46,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     paddingHorizontal: 10,
     paddingBottom: 10,
-    backgroundColor: '#FFF',
+
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -45,8 +55,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderWidth: 1,
     borderRadius: 25,
-    borderColor: '#d0d0d0',
-    backgroundColor: '#FFF',
+
     height: 50,
   },
   sendIcon: {

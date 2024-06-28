@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Thumbnail from '../../components/Thumbnail';
+import {ThemeContext} from '../navigation/Navigation';
 import MessageTypingAnimation from './MessageTypingAnimation';
 
 interface IMessageBubbleFriend {
@@ -10,6 +11,7 @@ interface IMessageBubbleFriend {
 }
 
 const MessageBubbleFriend = ({text, friend, typing}: IMessageBubbleFriend) => {
+  const {colors} = useContext(ThemeContext);
   return (
     <View style={styles.messageWrapper}>
       <Thumbnail size={42} path={friend.thumbnail} />
@@ -21,7 +23,9 @@ const MessageBubbleFriend = ({text, friend, typing}: IMessageBubbleFriend) => {
             <MessageTypingAnimation offset={2} />
           </View>
         ) : (
-          <Text style={styles.messageText}>{text}</Text>
+          <Text style={[styles.messageText, {color: colors.darkGray}]}>
+            {text}
+          </Text>
         )}
       </View>
       <View style={styles.flex} />
@@ -52,7 +56,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   messageText: {
-    color: '#202020',
     fontSize: 16,
     lineHeight: 18,
   },

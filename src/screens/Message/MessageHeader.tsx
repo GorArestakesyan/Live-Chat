@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Thumbnail from '../../components/Thumbnail';
+import {ThemeContext} from '../navigation/Navigation';
 
 const MessageHeader = ({friend}: any) => {
+  const {colors} = useContext(ThemeContext);
   return (
     <View style={styles.headerContainer}>
       <Thumbnail path={friend.thumbnail} size={30} />
-      <Text style={styles.name}>{friend.name}</Text>
+      <Text style={[styles.name, {color: colors.primaryText}]}>
+        {friend.name}
+      </Text>
     </View>
   );
 };
@@ -19,7 +23,6 @@ const styles = StyleSheet.create({
     gap: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
     justifyContent: 'space-around',
   },
   name: {
