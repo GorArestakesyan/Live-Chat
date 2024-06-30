@@ -27,12 +27,6 @@ const Splash = ({navigation}: any) => {
   }, []);
 
   return (
-    // <StatusBar
-    //     animated={true}
-    //     barStyle={'dark-content'}
-    //     backgroundColor={'#000'}
-    //   />
-
     <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <Animated.View style={[animatedStyle, styles.splashBox]}>
         <Title text="Live Chat" color={colors.primaryText} />

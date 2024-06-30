@@ -1,4 +1,5 @@
-import React from 'react';
+import {ThemeContext} from '@screens/navigation/Navigation';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 interface IInput {
@@ -18,13 +19,14 @@ const Input = ({
   setError,
   onChange,
 }: IInput) => {
+  const {colors} = useContext(ThemeContext);
   return (
     <View style={styles.inputWrapper}>
       <Text
         style={[
           styles.inputHead,
           {
-            color: error ? '#ff5555' : '#70747a',
+            color: error ? colors.error : colors.darkGraySecondary,
           },
         ]}>
         {error ? error : title}
@@ -37,7 +39,7 @@ const Input = ({
         style={[
           styles.input,
           {
-            borderColor: error ? '#ff5555' : '#70747a',
+            borderColor: error ? colors.error : colors.darkGraySecondary,
             borderWidth: error ? 1 : 0,
           },
         ]}

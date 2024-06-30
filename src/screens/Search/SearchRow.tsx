@@ -1,3 +1,4 @@
+import {TSearchedUser} from '@src/core/types';
 import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Cell from '../../common/Cell';
@@ -5,7 +6,7 @@ import Thumbnail from '../../components/Thumbnail';
 import {ThemeContext} from '../navigation/Navigation';
 import SearchButton from './SearchButton';
 
-const SearchRow = ({user}: any) => {
+const SearchRow = ({user}: {user: TSearchedUser}) => {
   const {colors} = useContext(ThemeContext);
   return (
     <Cell>

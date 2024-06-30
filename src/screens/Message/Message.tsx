@@ -1,3 +1,10 @@
+import Back from '@components/Back';
+import {ThemeContainer} from '@components/ThemeContainer';
+import {useGlobalState} from '@core/global';
+import MessageBubble from '@screens/Message/MessageBubble';
+import MessageHeader from '@screens/Message/MessageHeader';
+import MessageInput from '@screens/Message/MessageInput';
+import {ThemeContext} from '@screens/navigation/Navigation';
 import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {
   FlatList,
@@ -9,13 +16,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Back from '../../components/Back';
-import {ThemeContainer} from '../../components/ThemeContainer';
-import {useGlobalState} from '../../core/global';
-import {ThemeContext} from '../navigation/Navigation';
-import MessageBubble from './MessageBubble';
-import MessageHeader from './MessageHeader';
-import MessageInput from './MessageInput';
 
 const MessageScreen = ({navigation, route}: any) => {
   const {colors} = useContext(ThemeContext);

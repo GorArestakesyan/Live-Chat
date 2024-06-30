@@ -1,9 +1,9 @@
+import Thumbnail from '@components/Thumbnail';
+import utils from '@core/utils';
+import {ThemeContext} from '@screens/navigation/Navigation';
 import React, {useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Cell from '../../common/Cell';
-import Thumbnail from '../../components/Thumbnail';
-import utils from '../../core/utils';
-import {ThemeContext} from '../navigation/Navigation';
 
 const FriendRow = ({navigation, item}: any) => {
   const handleNavigate = () => navigation.navigate('Messages', item);

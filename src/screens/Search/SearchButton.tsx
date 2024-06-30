@@ -1,9 +1,16 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {TSearchedUser} from '@src/core/types';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useGlobalState} from '../../core/global';
 
-const SearchButton = ({user}: any) => {
+interface TNewSearchedUser extends TSearchedUser {
+  text?: string;
+  onPress?: () => void;
+  disabled?: boolean;
+}
+
+const SearchButton = ({user}: {user: TNewSearchedUser}) => {
   // Add tick if user is already connected
   if (user.status === 'connected') {
     return (

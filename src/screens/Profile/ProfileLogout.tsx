@@ -1,10 +1,11 @@
+import {useGlobalState} from '@core/global';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {IGlobalState} from '@src/core/types';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {useGlobalState} from '../../core/global';
 
 const ProfileLogout = () => {
-  const logout = useGlobalState(state => state.logout);
+  const logout = useGlobalState((state: IGlobalState) => state.logout);
   return (
     <TouchableOpacity style={styles.btn} onPress={logout}>
       <FontAwesomeIcon

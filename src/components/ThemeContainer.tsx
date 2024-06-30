@@ -1,6 +1,6 @@
+import {ThemeContext} from '@screens/navigation/Navigation';
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import {ThemeContext} from '../screens/navigation/Navigation';
 
 export const ThemeContainer = ({children}: {children: React.ReactNode}) => {
   const {colors} = useContext(ThemeContext);

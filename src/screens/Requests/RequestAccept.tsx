@@ -1,9 +1,12 @@
+import {IGlobalState} from '@src/core/types';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useGlobalState} from '../../core/global';
 
 const RequestAccept = ({item}: any) => {
-  const requestAccept = useGlobalState((state: any) => state.requestAccept);
+  const requestAccept = useGlobalState(
+    (state: IGlobalState) => state.requestAccept,
+  );
 
   return (
     <TouchableOpacity

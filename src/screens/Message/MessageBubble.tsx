@@ -1,5 +1,5 @@
+import {useGlobalState} from '@core/global';
 import React, {useEffect, useState} from 'react';
-import {useGlobalState} from '../../core/global';
 import MessageBubbleFriend from './MessageBubbleFriend';
 import MessageBubbleMe from './MessageBubbleMe';
 

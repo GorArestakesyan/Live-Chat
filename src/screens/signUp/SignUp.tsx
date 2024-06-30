@@ -1,4 +1,6 @@
-import React, {useLayoutEffect, useState} from 'react';
+import {ThemeContext} from '@screens/navigation/Navigation';
+import {IGlobalState} from '@src/core/types';
+import React, {useContext, useLayoutEffect, useState} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -28,8 +30,10 @@ const SignUpScreen = ({navigation}: any) => {
   const [firstName, setFirstName] = useState('');
   const [retryPassword, setRetryPassword] = useState('');
 
+  const {colors} = useContext(ThemeContext);
+
   const goToSignIn = () => navigation.navigate('SignIn');
-  const login = useGlobalState((state: any) => state.login);
+  const login = useGlobalState((state: IGlobalState) => state.login);
 
   const handleSubmit = () => {
     const failedUserName = !userName || userName.length < 5;
@@ -97,8 +101,14 @@ const SignUpScreen = ({navigation}: any) => {
     <KeyboardAvoidingView behavior={BEHAVIOR} style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={{flex: 1}}>
-          <View style={styles.signUpWrapper}>
-            <Text style={styles.signUpText}>Sign Up</Text>
+          <View
+            style={[
+              styles.signUpWrapper,
+              {backgroundColor: colors.background},
+            ]}>
+            <Text style={[styles.signUpText, {color: colors.primaryText}]}>
+              Sign Up
+            </Text>
             <Input
               title="Username"
               value={userName}
@@ -137,7 +147,7 @@ const SignUpScreen = ({navigation}: any) => {
               setError={setRetryPasswordError}
             />
             <Button title="Sign Up" onPress={handleSubmit} />
-            <Text style={styles.getAccText}>
+            <Text style={[styles.getAccText, {color: colors.primaryText}]}>
               Already have an account?{' '}
               <Text style={styles.signUp} onPress={goToSignIn}>
                 Sign In

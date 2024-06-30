@@ -1,14 +1,15 @@
+import {ThemeContainer} from '@components/ThemeContainer';
+import {useGlobalState} from '@core/global';
+import {IGlobalState} from '@core/types';
+import {ThemeContext} from '@screens/navigation/Navigation';
+import {colors as theme} from '@utils/Colors';
 import React, {useContext, useEffect} from 'react';
 import {StyleSheet, Switch, Text, View} from 'react-native';
-import {ThemeContainer} from '../../components/ThemeContainer';
-import {useGlobalState} from '../../core/global';
-import {colors as theme} from '../../utils/Colors';
-import {ThemeContext} from '../navigation/Navigation';
 import ProfileImage from './ProfileImage';
 import ProfileLogout from './ProfileLogout';
 
 const ProfileScreen = () => {
-  const user = useGlobalState((state: any) => state.user);
+  const user = useGlobalState((state: IGlobalState) => state.user);
   const {colors, toggleTheme} = useContext(ThemeContext);
   useEffect(() => {
     console.log('theme.dark === colors', theme.dark === colors);
@@ -30,8 +31,8 @@ const ProfileScreen = () => {
       </View>
       <View style={styles.profileContainer}>
         <ProfileImage />
-        <Text style={[styles.name, {color: colors.name}]}>{user.name}</Text>
-        <Text style={styles.nick}>@{user.username}</Text>
+        <Text style={[styles.name, {color: colors.name}]}>{user?.name}</Text>
+        <Text style={styles.nick}>@{user?.username}</Text>
         <ProfileLogout />
       </View>
     </ThemeContainer>

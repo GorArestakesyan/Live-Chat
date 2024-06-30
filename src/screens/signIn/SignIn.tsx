@@ -1,4 +1,12 @@
-import React, {useLayoutEffect, useState} from 'react';
+import Button from '@components/Button';
+import Input from '@components/Input';
+import api from '@core/api';
+import {useGlobalState} from '@core/global';
+import utils from '@core/utils';
+import {ThemeContext} from '@screens/navigation/Navigation';
+import {IGlobalState} from '@src/core/types';
+import {BEHAVIOR} from '@utils/constants';
+import React, {useContext, useLayoutEffect, useState} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -9,19 +17,16 @@ import {
   View,
 } from 'react-native';
 import Title from '../../common/Title';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import api from '../../core/api';
-import {useGlobalState} from '../../core/global';
-import utils from '../../core/utils';
-import {BEHAVIOR} from '../../utils/constants';
+
 const SignInScreen = ({navigation}: any) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [userNameError, setUsernameError] = useState('');
 
-  const login = useGlobalState((state: any) => state.login);
+  const {colors} = useContext(ThemeContext);
+
+  const login = useGlobalState((state: IGlobalState) => state.login);
 
   const handleSignIn = () => {
     const failedUserName = !userName;
@@ -81,8 +86,12 @@ const SignInScreen = ({navigation}: any) => {
     <KeyboardAvoidingView behavior={BEHAVIOR} style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.safeArea}>
-          <View style={styles.signInContainer}>
-            <Title text="RealtimeChat" color="#202020" />
+          <View
+            style={[
+              styles.signInContainer,
+              {backgroundColor: colors.background},
+            ]}>
+            <Title text="RealtimeChat" color={colors.primaryText} />
             <Input
               title={'Username'}
               value={userName}
@@ -100,7 +109,7 @@ const SignInScreen = ({navigation}: any) => {
               setError={setPasswordError}
             />
             <Button title="Sign In" onPress={handleSignIn} />
-            <Text style={styles.getAccText}>
+            <Text style={[styles.getAccText, {color: colors.primaryText}]}>
               Don't have an account?{' '}
               <Text style={styles.signUp} onPress={handleSignUp}>
                 Sign up
@@ -122,6 +131,7 @@ const styles = StyleSheet.create({
   signInContainer: {
     flex: 1,
     alignItems: 'center',
+
     justifyContent: 'center',
   },
   getAccText: {

@@ -1,67 +1,21 @@
+import api from '@core/api';
+import {ADDRESS_WITHOUT_PROTOCOL} from '@utils/constants';
 import {create} from 'zustand';
-import {ADDRESS_WITHOUT_PROTOCOL} from '../utils/constants';
-import api from './api';
 import secure from './secure';
+import {
+  IGlobalState,
+  IParsedData,
+  TMessage,
+  TMessageList,
+  TRequestUser,
+  TResponseSources,
+  TSearchedUser,
+  TThumbnail,
+  TUser,
+  TUserTyping,
+} from './types';
 import utils from './utils';
 
-type TConnectionType = 'connected' | 'no-connection';
-
-type TSearchedUser = {
-  username: string;
-  name: string;
-  thumbnail: string;
-  status: TConnectionType;
-};
-type TUserTyping = {
-  username: string;
-};
-type TRequestUser = {
-  id: number;
-  sender: Omit<TSearchedUser, 'status'>;
-  receiver: Omit<TSearchedUser, 'status'>;
-  created: Date;
-};
-type TMessage = {
-  message: {
-    id: number;
-    is_me: boolean;
-    text: string;
-    created: Date;
-  };
-  friend: Omit<TSearchedUser, 'status'>;
-};
-type TMessageList = {
-  messagesList: TMessage[];
-  messages: TMessage[];
-  next: number | null;
-  friend: Omit<TSearchedUser, 'status'>;
-};
-export type TUser = {
-  id: number;
-  friend: Omit<TSearchedUser, 'status'>;
-  preview: 'New connection';
-  updated: Date;
-};
-type TThumbnail = {
-  uri: string;
-  fileSize: number;
-  height: number;
-  base64: string;
-  type: string;
-  width: number;
-  fileName: string;
-};
-
-export type TGlobalState = {
-  initialized: boolean;
-  searchList: TSearchedUser[];
-  requestList: TRequestUser[];
-  friendList: TUser[];
-  messagesList: TMessageList[];
-  messagesNext: boolean;
-  messagesTyping: TUserTyping;
-  messagesUsername: TUserTyping;
-};
 //-----------------------------------------
 //     Socket receive message handlers  (second argument for that function is y getter)
 //-----------------------------------------
@@ -225,7 +179,7 @@ function responseRequestAccept(set: any, get: any, connection: TRequestUser) {
   }
 }
 
-export const useGlobalState = create((set, get: any) => ({
+export const useGlobalState = create<IGlobalState>((set, get) => ({
   //-------------------------
   //     Initialization
   //-------------------------
@@ -271,11 +225,13 @@ export const useGlobalState = create((set, get: any) => ({
   //     Authentication
   //-------------------------
   authenticated: false,
+  //@ts-ignore
   user: {},
 
-  login: (credentials: any, user: TUser, tokens: string[]) => {
+  login: (credentials, user, tokens) => {
     secure.set('credentials', credentials);
     secure.set('tokens', tokens);
+    //@ts-ignore
     set(() => ({
       authenticated: true,
       user: user,
@@ -284,6 +240,7 @@ export const useGlobalState = create((set, get: any) => ({
 
   logout: () => {
     secure.wipe();
+    //@ts-ignore
     set(() => ({
       authenticated: false,
       user: {},
@@ -297,29 +254,22 @@ export const useGlobalState = create((set, get: any) => ({
 
   socketConnect: async () => {
     const tokens = await secure.get('tokens');
-
     const url = `ws://${ADDRESS_WITHOUT_PROTOCOL}/chat/?token=${tokens?.access}`;
-
     const socket = new WebSocket(url);
-    socket.onopen = () => {
-      utils.log('SOCKET OPEN');
 
-      socket.send(
-        JSON.stringify({
-          source: 'request.list',
-        }),
-      );
-      socket.send(
-        JSON.stringify({
-          source: 'friend.list',
-        }),
-      );
+    socket.onopen = () => {
+      console.log('SOCKET OPEN');
+      socket?.send(JSON.stringify({source: 'request.list'}));
+      socket?.send(JSON.stringify({source: 'friend.list'}));
     };
+
     socket.onmessage = event => {
-      // Convert data to javascript object
-      const parsed = JSON.parse(event.data);
-      utils.log('SOCKET MESSAGE', parsed);
-      const responses = {
+      const parsed: IParsedData = JSON.parse(event.data);
+      console.log('SOCKET MESSAGE', parsed);
+      const responses: Record<
+        TResponseSources,
+        (set: any, get: any, data: any) => void
+      > = {
         search: responseSearch,
         thumbnail: responseThumbnail,
         'friend.new': responseFriendNew,
@@ -331,30 +281,31 @@ export const useGlobalState = create((set, get: any) => ({
         'request.accept': responseRequestAccept,
         'request.connect': responseRequestConnect,
       };
-      //@ts-ignore
+
       const resp = responses[parsed.source];
       if (!resp) {
-        utils.log('parsed.source "' + parsed.source + '" not found');
+        console.log(`parsed.source "${parsed.source}" not found`);
         return;
       }
-      // Call response function
       resp(set, get, parsed.data);
     };
-    socket.onerror = (error: WebSocketErrorEvent) => {
-      utils.log('SOCKET ERROR', error?.message);
+
+    socket.onerror = error => {
+      console.log('SOCKET ERROR', error.message);
     };
+
     socket.onclose = () => {
-      utils.log('SOCKET CLOSED');
+      console.log('SOCKET CLOSED');
     };
+
     set(() => ({
       socket: socket,
     }));
-    utils.log('TOKENS', tokens);
   },
   socketClose: () => {
     const socket = get().socket;
     if (socket) {
-      socket.close();
+      socket?.close();
     }
     set(() => ({
       socket: null,
@@ -368,7 +319,7 @@ export const useGlobalState = create((set, get: any) => ({
   searchUsers: (query: string) => {
     if (query) {
       const socket = get().socket;
-      socket.send(
+      socket?.send(
         JSON.stringify({
           source: 'search',
           query: query,
@@ -407,7 +358,7 @@ export const useGlobalState = create((set, get: any) => ({
       }));
     }
     const socket = get().socket;
-    socket.send(
+    socket?.send(
       JSON.stringify({
         source: 'message.list',
         connectionId: connectionId,
@@ -418,7 +369,7 @@ export const useGlobalState = create((set, get: any) => ({
 
   messageSend: (connectionId: number, message: string) => {
     const socket = get().socket;
-    socket.send(
+    socket?.send(
       JSON.stringify({
         source: 'message.send',
         connectionId: connectionId,
@@ -429,7 +380,7 @@ export const useGlobalState = create((set, get: any) => ({
 
   messageType: (username: string) => {
     const socket = get().socket;
-    socket.send(
+    socket?.send(
       JSON.stringify({
         source: 'message.type',
         username: username,
@@ -443,7 +394,7 @@ export const useGlobalState = create((set, get: any) => ({
 
   requestConnect: (username: string) => {
     const socket = get().socket;
-    socket.send(
+    socket?.send(
       JSON.stringify({
         source: 'request.connect',
         username: username,
@@ -452,7 +403,7 @@ export const useGlobalState = create((set, get: any) => ({
   },
   requestAccept: (username: string) => {
     const socket = get().socket;
-    socket.send(
+    socket?.send(
       JSON.stringify({
         source: 'request.accept',
         username: username,
@@ -467,8 +418,8 @@ export const useGlobalState = create((set, get: any) => ({
   uploadThumbnail: (file: TThumbnail) => {
     const socket = get().socket;
 
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(
+    if (socket && socket?.readyState === WebSocket?.OPEN) {
+      socket?.send(
         JSON.stringify({
           source: 'thumbnail',
           base64: file.base64,

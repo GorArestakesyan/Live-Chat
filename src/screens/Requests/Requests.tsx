@@ -1,12 +1,15 @@
+import Empty from '@components/Empty';
+import {ThemeContainer} from '@components/ThemeContainer';
+import {useGlobalState} from '@core/global';
+import {IGlobalState} from '@src/core/types';
 import React from 'react';
 import {ActivityIndicator, FlatList} from 'react-native';
-import Empty from '../../components/Empty';
-import {ThemeContainer} from '../../components/ThemeContainer';
-import {useGlobalState} from '../../core/global';
 import RequestRow from './RequestRow';
 
 const RequestsScreen = () => {
-  const requestsList = useGlobalState((state: any) => state.requestList);
+  const requestsList = useGlobalState(
+    (state: IGlobalState) => state.requestList,
+  );
 
   if (requestsList === null) {
     return (

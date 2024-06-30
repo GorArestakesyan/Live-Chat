@@ -1,15 +1,19 @@
+import Empty from '@components/Empty';
+import {ThemeContainer} from '@components/ThemeContainer';
+import {useGlobalState} from '@core/global';
 import React from 'react';
 import {ActivityIndicator, FlatList} from 'react-native';
-import Empty from '../../components/Empty';
-import {ThemeContainer} from '../../components/ThemeContainer';
-import {useGlobalState} from '../../core/global';
 import FriendRow from './FriendRow';
 
 const FriendsScreen = ({navigation}: any) => {
   const friendsList = useGlobalState((state: any) => state.friendList);
 
   if (friendsList === null) {
-    return <ActivityIndicator style={{flex: 1}} />;
+    return (
+      <ThemeContainer>
+        <ActivityIndicator style={{flex: 1}} />
+      </ThemeContainer>
+    );
   }
 
   // Show empty if no requests

@@ -1,7 +1,10 @@
+//@ts-ignore
+import AvatarImage from '@assets/images/avatar.png';
+import {ADDRESS_WITHOUT_PROTOCOL} from '@utils/constants';
 import {Platform} from 'react-native';
-import AvatarImage from '../assets/images/avatar.png';
-import {ADDRESS_WITHOUT_PROTOCOL} from '../utils/constants';
-function log(p0?: string, response?: unknown) {
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function log<U>(args: string, secArg?: U): void {
   // Much better console.log function that formats/indents
   // objects for better reabability
   for (let i = 0; i < arguments.length; i++) {

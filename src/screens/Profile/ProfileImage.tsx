@@ -1,11 +1,11 @@
+import Thumbnail from '@components/Thumbnail';
+import {useGlobalState} from '@core/global';
+import utils from '@core/utils';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {ThemeContext} from '@screens/navigation/Navigation';
 import React, {useContext} from 'react';
 import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import Thumbnail from '../../components/Thumbnail';
-import {useGlobalState} from '../../core/global';
-import utils from '../../core/utils';
-import {ThemeContext} from '../navigation/Navigation';
 const ProfileImage = () => {
   const {colors} = useContext(ThemeContext);
 

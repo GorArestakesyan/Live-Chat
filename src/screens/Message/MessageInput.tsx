@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {ThemeContext} from '@screens/navigation/Navigation';
 import React, {useContext} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {ThemeContext} from '../navigation/Navigation';
 
 interface IMessage {
   message: string;

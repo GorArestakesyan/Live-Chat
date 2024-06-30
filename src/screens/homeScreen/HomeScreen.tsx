@@ -1,14 +1,14 @@
+import React, {useContext, useEffect, useLayoutEffect} from 'react';
+import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
 /* eslint-disable react/no-unstable-nested-components */
+import Thumbnail from '@components/Thumbnail';
+import {useGlobalState} from '@core/global';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useContext, useEffect, useLayoutEffect} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Thumbnail from '../../components/Thumbnail';
-import {useGlobalState} from '../../core/global';
-import FriendsScreen from '../Friends/FriendsScreen';
-import ProfileScreen from '../Profile/Prifile';
-import RequestsScreen from '../Requests/Requests';
-import {ThemeContext} from '../navigation/Navigation';
+import FriendsScreen from '@screens/Friends/FriendsScreen';
+import ProfileScreen from '@screens/Profile/Prifile';
+import RequestsScreen from '@screens/Requests/Requests';
+import {ThemeContext} from '@screens/navigation/Navigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,9 +43,11 @@ const HomeScreen = ({navigation}: any) => {
         headerTitleStyle: {color: colors.primaryText},
         headerLeft: () => {
           return (
-            <View style={styles.avatarImgWrapper}>
+            <Pressable
+              style={styles.avatarImgWrapper}
+              onPress={() => navigation.navigate('Profile')}>
               <Thumbnail path={user.thumbnail} size={28} />
-            </View>
+            </Pressable>
           );
         },
         headerRight: () => {

@@ -4,17 +4,17 @@ import {SafeAreaView, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import HomeScreen from '../homeScreen/HomeScreen';
-import MessageScreen from '../Message/Message';
-import SearchScreen from '../Search/Search';
-import SignInScreen from '../signIn/SignIn';
-import SignUpScreen from '../signUp/SignUp';
-import Splash from '../Splash';
+import MessageScreen from '@screens/Message/Message';
+import SearchScreen from '@screens/Search/Search';
+import SignInScreen from '@screens/signIn/SignIn';
+import SignUpScreen from '@screens/signUp/SignUp';
+import Splash from '@screens/Splash';
 
+import '@core/fontAwesome';
+import {useGlobalState} from '@core/global';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import '../../core/fontAwesome';
-import {useGlobalState} from '../../core/global';
-import {colors} from '../../utils/Colors';
+import {colors} from '@utils/Colors';
+import HomeScreen from '../homeScreen/HomeScreen';
 
 const Stack = createStackNavigator();
 

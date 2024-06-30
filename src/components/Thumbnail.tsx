@@ -1,6 +1,6 @@
+import utils from '@core/utils';
 import React from 'react';
 import {Image, StyleSheet} from 'react-native';
-import utils from '../core/utils';
 
 interface IThumbnail {
   path: string;

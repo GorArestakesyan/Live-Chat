@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {IGlobalState} from '@src/core/types';
 import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {FlatList, StyleSheet, TextInput, View} from 'react-native';
 import Back from '../../components/Back';
@@ -11,8 +12,9 @@ import SearchRow from './SearchRow';
 
 const SearchScreen = ({navigation}: any) => {
   const [query, setQuery] = useState('');
-  const searchList = useGlobalState((state: any) => state.searchList);
-  const searchUsers = useGlobalState((state: any) => state.searchUsers);
+  const {searchUsers, searchList} = useGlobalState(
+    (state: IGlobalState) => state,
+  );
   const {colors} = useContext(ThemeContext);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
+import Thumbnail from '@components/Thumbnail';
+import {ThemeContext} from '@screens/navigation/Navigation';
 import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import Thumbnail from '../../components/Thumbnail';
-import {ThemeContext} from '../navigation/Navigation';
 import MessageTypingAnimation from './MessageTypingAnimation';
 
 interface IMessageBubbleFriend {

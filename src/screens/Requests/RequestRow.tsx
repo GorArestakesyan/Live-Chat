@@ -1,11 +1,12 @@
 /* eslint-disable react/react-in-jsx-scope */
+import Thumbnail from '@components/Thumbnail';
+import utils from '@core/utils';
+import {TRequestUser} from '@src/core/types';
 import {StyleSheet, Text, View} from 'react-native';
 import Cell from '../../common/Cell';
-import Thumbnail from '../../components/Thumbnail';
-import utils from '../../core/utils';
 import RequestAccept from './RequestAccept';
 
-const RequestRow = ({item}: any) => {
+const RequestRow = ({item}: {item: TRequestUser}) => {
   const message = 'Requested to connect with you ';
   const time = utils.formatedData(item.created);
 
